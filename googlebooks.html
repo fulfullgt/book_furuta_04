@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="css/sample.css">
+<title>GoogleBook検索</title>
+</head>
+<body>
+
+  <header>
+    <h1>GoogleBooks検索</h1>
+    <p>
+      <input type="text" id="keyword">
+      <button id="readbook">データ読み込み</button>
+    </p>
+  </header>
+
+  <main>
+    <table id="content">
+      <tr><th id="title">題名</th><th id="detail">著者</th></tr>
+<!-- ここに追加していく -->
+    </table>
+    <!-- <ul id="content"></ul> -->
+  </main>
+
+
+<script src="js/jquery-3.5.1.min.js"></script>
+
+<script>
+$("#readbook").on("click", function(){
+  $("td").remove();
+  const input = $("#keyword").val();
+  console.log(input);
+
+  $.get(`https://www.googleapis.com/books/v1/volumes?q=${input}`, function(data){
+    const items = data.items;
+    let view = "";
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const title = item.volumeInfo.title;
+      const authors = item.volumeInfo.authors;
+      const link = item.volumeInfo.authors;
+      view += `<tr>
+                <td id="title${i}" ><a href="https://books.google.co.jp/">${title}</a></td>
+                <td id="authors${i}"><a href="https://books.google.co.jp/">${authors}</a></td>
+              </tr>`;
+    }
+    $("#content").append(view);
+  // console.log(items);
+  })
+});
+
+</script>
+</body>
+</html>
